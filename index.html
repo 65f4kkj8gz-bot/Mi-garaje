@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#070b12">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Mi Garaje">
+<link rel="manifest" href="manifest.json">
+<title>Mi Garaje</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#070b12;color:#f5f7fb;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif}
+button,input,select{font:inherit}.app{max-width:520px;margin:auto;padding:calc(env(safe-area-inset-top) + 18px) 16px calc(env(safe-area-inset-bottom) + 100px)}
+header{display:flex;align-items:center;gap:12px}.logo{font-size:34px}.title{font-size:30px;font-weight:800;letter-spacing:-1px}.blue{color:#2b8cff}.muted{color:#9ba8bb}.small{font-size:13px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:22px 0}.stat{background:#121a27;border:1px solid #202c3e;border-radius:16px;padding:12px 5px;text-align:center}.stat b{display:block;font-size:22px;margin:3px 0}.stat span{font-size:11px;color:#9ba8bb}
+h2{font-size:21px;margin:22px 0 12px}.card,.list{background:#121a27;border:1px solid #202c3e;border-radius:20px;padding:15px;margin:11px 0}.vehicle{display:flex;gap:13px;align-items:center}.pic{width:88px;height:76px;border-radius:14px;background:#1b2636;display:grid;place-items:center;font-size:38px}.vehicle h3{margin:0 0 4px;font-size:18px}.ok{color:#36d27f;font-size:13px;margin-top:5px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;border-top:1px solid #273345;margin-top:14px;padding-top:12px}.grid div{font-size:18px}.grid small{display:block;color:#a7b1c0;font-size:11px;margin-top:4px}.danger{color:#ff6872!important}.warning{color:#ffc24d!important}.item{display:flex;align-items:center;gap:11px;padding:12px 0;border-bottom:1px solid #273345}.item:last-child{border-bottom:0}.item .ico{width:38px;height:38px;border-radius:11px;background:#1d2532;display:grid;place-items:center;font-size:18px}.badge{margin-left:auto;border-radius:18px;padding:7px 9px;background:#2c2028;color:#ff7180;font-size:11px;font-weight:700}.fab{position:fixed;right:22px;bottom:78px;width:58px;height:58px;border:0;border-radius:50%;background:#248cff;color:white;font-size:31px;box-shadow:0 8px 25px #0008}.nav{position:fixed;left:0;right:0;bottom:0;padding:9px 5px calc(env(safe-area-inset-bottom) + 5px);background:#0b1019ee;backdrop-filter:blur(15px);display:flex;justify-content:space-around;border-top:1px solid #1b2636}.nav button{background:none;border:0;color:#8996aa;font-size:10px}.nav button.active{color:#2b8cff}.nav i{display:block;font-style:normal;font-size:20px;margin-bottom:3px}.empty{padding:25px;text-align:center;color:#94a0b2}.modal{position:fixed;inset:0;background:#0009;display:none;align-items:flex-end;z-index:10}.sheet{background:#111925;border-radius:25px 25px 0 0;width:100%;max-width:520px;margin:auto;padding:22px 18px calc(env(safe-area-inset-bottom) + 25px);border:1px solid #263246}.sheet h2{margin-top:0}.field{margin:10px 0}.field label{display:block;color:#aab5c5;font-size:12px;margin-bottom:6px}.field input,.field select{width:100%;padding:13px;border-radius:12px;border:1px solid #2a374a;background:#0b111a;color:white}.actions{display:flex;gap:10px;margin-top:16px}.actions button{flex:1;padding:13px;border:0;border-radius:13px;font-weight:700}.cancel{background:#202b3b;color:white}.save{background:#248cff;color:white}
+</style>
+</head>
+<body>
+<main class="app">
+<header><div class="logo">🚗</div><div><div class="title">Mi <span class="blue">Garaje</span></div><div class="muted">Tus vehículos, siempre a punto</div></div><div style="margin-left:auto;font-size:23px">🔔</div></header>
+<section class="stats"><div class="stat">🚗<b id="cars">0</b><span>Coches</span></div><div class="stat">🏍️<b id="motos">0</b><span>Motos</span></div><div class="stat">🔧<b id="next">0</b><span>Próximos</span></div><div class="stat">⚠️<b class="danger" id="late">0</b><span>Vencidos</span></div></section>
+<h2>Mis vehículos</h2><div id="vehicles"></div>
+<h2>🔧 Mantenimientos próximos</h2><div class="list" id="maintenance"></div>
+</main>
+<button class="fab" onclick="openModal()">＋</button>
+<nav class="nav"><button class="active"><i>⌂</i>Inicio</button><button onclick="scrollTo(0,document.body.scrollHeight)"><i>🚗</i>Vehículos</button><button><i>🔧</i>Mantenimientos</button><button><i>⛽</i>Gastos</button><button><i>•••</i>Más</button></nav>
+
+<div class="modal" id="modal" onclick="if(event.target===this)closeModal()"><div class="sheet">
+<h2>Añadir vehículo</h2>
+<div class="field"><label>Nombre</label><input id="name" placeholder="Ej. BMW 320d"></div>
+<div class="field"><label>Tipo</label><select id="type"><option>Coche</option><option>Moto</option></select></div>
+<div class="field"><label>Año</label><input id="year" type="number" placeholder="2020"></div>
+<div class="field"><label>Kilómetros actuales</label><input id="km" type="number" placeholder="84250"></div>
+<div class="actions"><button class="cancel" onclick="closeModal()">Cancelar</button><button class="save" onclick="saveVehicle()">Guardar</button></div>
+</div></div>
+
+<script>
+const KEY="mi-garaje-v1";
+let data=JSON.parse(localStorage.getItem(KEY)||"null")||{
+ vehicles:[
+  {name:"BMW 320d",type:"Coche",year:"2018",km:"84250",m:[["🛢️","Aceite","2.350 km","danger"],["🛞","Neumáticos","1.000 km","warning"],["📅","ITV","Vencida (12 días)","danger"]]},
+  {name:"Yamaha MT-07",type:"Moto",year:"2021",km:"25600",m:[["🛢️","Aceite","4.400 km","ok"],["🛞","Neumáticos","3.000 km","ok"],["🔋","Batería","7 meses","warning"]]}
+ ]};
+function save(){localStorage.setItem(KEY,JSON.stringify(data))}
+function render(){
+ let cars=data.vehicles.filter(v=>v.type==="Coche").length,motos=data.vehicles.filter(v=>v.type==="Moto").length;
+ document.getElementById("cars").textContent=cars;document.getElementById("motos").textContent=motos;
+ document.getElementById("next").textContent=data.vehicles.reduce((a,v)=>a+v.m.length,0);
+ document.getElementById("late").textContent=data.vehicles.reduce((a,v)=>a+v.m.filter(x=>x[3]==="danger").length,0);
+ document.getElementById("vehicles").innerHTML=data.vehicles.map(v=>`<div class="card"><div class="vehicle"><div class="pic">${v.type==="Moto"?"🏍️":"🚘"}</div><div><h3>${v.name}</h3><div class="muted">${v.type} · ${v.year}</div><div>${Number(v.km).toLocaleString("es-ES")} km</div><div class="ok">● En buen estado</div></div></div><div class="grid">${v.m.map(x=>`<div>${x[0]}<small class="${x[3]}">${x[1]}<br>${x[2]}</small></div>`).join("")}</div></div>`).join("");
+ let rows=[];data.vehicles.forEach(v=>v.m.forEach(x=>rows.push(`<div class="item"><div class="ico">${x[0]}</div><div><b>${x[1]}</b><br><span class="muted">${v.name} · ${Number(v.km).toLocaleString("es-ES")} km</span></div><span class="badge ${x[3]}">${x[2]}</span></div>`)));
+ document.getElementById("maintenance").innerHTML=rows.join("")||'<div class="empty">No hay mantenimientos todavía.</div>';
+}
+function openModal(){document.getElementById("modal").style.display="flex"}
+function closeModal(){document.getElementById("modal").style.display="none"}
+function saveVehicle(){
+ let name=document.getElementById("name").value.trim();if(!name)return alert("Escribe el nombre del vehículo.");
+ data.vehicles.push({name,type:document.getElementById("type").value,year:document.getElementById("year").value||"—",km:document.getElementById("km").value||"0",m:[]});
+ save();render();closeModal();["name","year","km"].forEach(id=>document.getElementById(id).value="");
+}
+render();
+if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");
+</script>
+</body></html>

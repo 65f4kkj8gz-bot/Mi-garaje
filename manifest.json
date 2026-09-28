@@ -1,0 +1,10 @@
+{
+  "name": "Mi Garaje",
+  "short_name": "Mi Garaje",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#070b12",
+  "theme_color": "#070b12",
+  "lang": "es",
+  "icons": []
+}
